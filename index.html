@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrada de Texto</title>
+    <title>Turmas e Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,72 +11,81 @@
             margin: 20px;
         }
         #container {
-            max-width: 500px;
+            max-width: 600px;
             margin: auto;
         }
-        .entry {
-            margin-top: 10px;
-        }
-        .text-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .text-box input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 5px;
-        }
-        .text-box button {
-            padding: 8px;
-            cursor: pointer;
-        }
-        .output {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
+        .turma {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
             text-align: left;
+        }
+        .turma input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        .turma button {
+            margin-top: 5px;
+            padding: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div id="container">
-        <h2>Insira seu texto</h2>
-        <div id="textEntries"></div>
-        <div class="text-box">
-            <input type="text" id="userInput" placeholder="Digite algo...">
-            <button onclick="addText()">Adicionar</button>
-        </div>
+        <h2>Turmas e Links de Grupos</h2>
+        <div id="turmasContainer"></div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", loadTexts);
+        let turmas = ["Turma A", "Turma B", "Turma C"]; // Substitua com os dados obtidos via Selenium
 
-        function addText() {
-            let input = document.getElementById("userInput");
-            let text = input.value.trim();
-            
-            if (text !== "") {
-                let texts = JSON.parse(localStorage.getItem("texts")) || [];
-                texts.push(text);
-                localStorage.setItem("texts", JSON.stringify(texts));
-                
-                displayText(text);
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTurmas();
+        });
+
+        function loadTurmas() {
+            let container = document.getElementById("turmasContainer");
+            container.innerHTML = "";
+
+            turmas.forEach(turma => {
+                let div = document.createElement("div");
+                div.classList.add("turma");
+                div.innerHTML = `<h3>${turma}</h3>
+                    <input type="text" id="input-${turma}" placeholder="Insira o link do grupo">
+                    <button onclick="addLink('${turma}')">Salvar</button>
+                    <div id="links-${turma}" class="links"></div>`;
+                container.appendChild(div);
+                loadLinks(turma);
+            });
+        }
+
+        function addLink(turma) {
+            let input = document.getElementById(`input-${turma}`);
+            let link = input.value.trim();
+            if (link !== "") {
+                let links = JSON.parse(localStorage.getItem(turma)) || [];
+                links.push(link);
+                localStorage.setItem(turma, JSON.stringify(links));
                 input.value = "";
-                input.focus();
+                loadLinks(turma);
             }
         }
 
-        function displayText(text) {
-            let entry = document.createElement("div");
-            entry.classList.add("entry");
-            entry.textContent = text;
-            document.getElementById("textEntries").appendChild(entry);
-        }
-
-        function loadTexts() {
-            let texts = JSON.parse(localStorage.getItem("texts")) || [];
-            texts.forEach(displayText);
+        function loadLinks(turma) {
+            let container = document.getElementById(`links-${turma}`);
+            container.innerHTML = "";
+            let links = JSON.parse(localStorage.getItem(turma)) || [];
+            links.forEach(link => {
+                let p = document.createElement("p");
+                let a = document.createElement("a");
+                a.href = link;
+                a.textContent = link;
+                a.target = "_blank";
+                p.appendChild(a);
+                container.appendChild(p);
+            });
         }
     </script>
 </body>
