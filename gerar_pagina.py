@@ -77,7 +77,7 @@ html_content += """
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        loadTurmas();
+        loadAllLinks();
     });
 
     function addLink(turma) {
@@ -106,7 +106,16 @@ html_content += """
             container.appendChild(p);
         });
     }
+
+    function loadAllLinks() {
+        let turmas = document.querySelectorAll(".turma h3");
+        turmas.forEach(turmaElement => {
+            let turma = turmaElement.textContent;
+            loadLinks(turma);
+        });
+    }
 </script>
+
 
 </body>
 </html>
