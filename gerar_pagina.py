@@ -1,23 +1,22 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-import time
+from coletar_selenium import *
+from datetime import datetime
 
-# Configurar o Selenium (Substitua pelo caminho correto do WebDriver)
-service = Service("/caminho/para/chromedriver")  # Ajuste o caminho para o ChromeDriver
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executa sem abrir o navegador
-driver = webdriver.Chrome(service=service, options=options)
 
-# Acessar o site e extrair turmas
-driver.get("URL_DO_SITE_COM_TURMAS")
-time.sleep(5)  # Esperar a página carregar (ajuste conforme necessário)
+data_inicio = datetime.now()
+data_formatada = data_inicio.strftime("%Y-%m-%d")
 
-# Pegando os nomes das turmas (ajuste conforme o site)
-turma_elements = driver.find_elements(By.CLASS_NAME, "classe_da_turma")  # Ajuste o seletor
-turmas = [turma.text for turma in turma_elements if turma.text]
 
-driver.quit()  # Fechar o Selenium
+print("===================================")
+print(f"Início: {data_inicio}")
+print("===================================")
+
+nivel = "GRADUAÇÃO"
+ano = "2025"
+periodo = "1"
+
+turmas = []
+turmas = main_carregar_dados(nivel, ano, periodo)
+
 
 # Criar HTML dinâmico com as turmas
 html_content = f"""
@@ -118,3 +117,9 @@ with open("index.html", "w", encoding="utf-8") as file:
     file.write(html_content)
 
 print("Página HTML gerada com sucesso! Abra 'index.html' no navegador.")
+
+data_fim = datetime.now()
+print(f"Fim: {data_fim}")
+print("================================")
+print(f"Duração do processo: {data_fim - data_inicio}")
+print("====================================")

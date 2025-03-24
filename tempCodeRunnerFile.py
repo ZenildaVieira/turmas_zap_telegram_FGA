@@ -1,0 +1,5 @@
+data_fim = datetime.now()
+print(f"Fim: {data_fim}")
+print("================================")
+print(f"Duração do processo: {data_fim - data_inicio}")
+print("====================================")
