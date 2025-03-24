@@ -39,7 +39,7 @@
         }
     </style>
 </head>
-<body onload="loadTexts()">
+<body>
     <div id="container">
         <h2>Insira seu texto</h2>
         <div id="textEntries"></div>
@@ -50,38 +50,33 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", loadTexts);
+
         function addText() {
             let input = document.getElementById("userInput");
             let text = input.value.trim();
             
             if (text !== "") {
-                let entry = document.createElement("div");
-                entry.classList.add("entry");
-                entry.textContent = text;
-                document.getElementById("textEntries").appendChild(entry);
+                let texts = JSON.parse(localStorage.getItem("texts")) || [];
+                texts.push(text);
+                localStorage.setItem("texts", JSON.stringify(texts));
                 
-                saveText(text);
+                displayText(text);
                 input.value = "";
                 input.focus();
             }
         }
 
-        function saveText(text) {
-            let texts = JSON.parse(localStorage.getItem("texts")) || [];
-            texts.push(text);
-            localStorage.setItem("texts", JSON.stringify(texts));
+        function displayText(text) {
+            let entry = document.createElement("div");
+            entry.classList.add("entry");
+            entry.textContent = text;
+            document.getElementById("textEntries").appendChild(entry);
         }
 
         function loadTexts() {
             let texts = JSON.parse(localStorage.getItem("texts")) || [];
-            let container = document.getElementById("textEntries");
-            
-            texts.forEach(text => {
-                let entry = document.createElement("div");
-                entry.classList.add("entry");
-                entry.textContent = text;
-                container.appendChild(entry);
-            });
+            texts.forEach(displayText);
         }
     </script>
 </body>
