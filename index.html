@@ -1982,7 +1982,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        loadAllLinks();
+        setTimeout(loadAllLinks, 500);
     });
 
     function addLink(turma) {
@@ -1999,6 +1999,8 @@
 
     function loadLinks(turma) {
         let container = document.getElementById(`links-${turma}`);
+        if (!container) return;
+
         container.innerHTML = "";
         let links = JSON.parse(localStorage.getItem(turma)) || [];
         links.forEach(link => {
@@ -2015,12 +2017,11 @@
     function loadAllLinks() {
         let turmas = document.querySelectorAll(".turma h3");
         turmas.forEach(turmaElement => {
-            let turma = turmaElement.textContent;
+            let turma = turmaElement.textContent.trim();
             loadLinks(turma);
         });
     }
 </script>
-
 
 </body>
 </html>

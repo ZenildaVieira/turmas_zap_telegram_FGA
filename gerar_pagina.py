@@ -17,8 +17,7 @@ periodo = "1"
 turmas = []
 turmas = main_carregar_dados(nivel, ano, periodo)
 
-
-# Criar HTML dinâmico com as turmas
+# Criar HTML dinâmico sem links pré-preenchidos
 html_content = f"""
 <!DOCTYPE html>
 <html lang="pt">
@@ -60,7 +59,7 @@ html_content = f"""
         <div id="turmasContainer">
 """
 
-# Adicionar cada turma ao HTML
+# Adicionar cada turma ao HTML sem links pré-carregados
 for turma in turmas:
     html_content += f"""
         <div class="turma">
@@ -77,7 +76,7 @@ html_content += """
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        loadAllLinks();
+        setTimeout(loadAllLinks, 500);
     });
 
     function addLink(turma) {
@@ -94,6 +93,8 @@ html_content += """
 
     function loadLinks(turma) {
         let container = document.getElementById(`links-${turma}`);
+        if (!container) return;
+
         container.innerHTML = "";
         let links = JSON.parse(localStorage.getItem(turma)) || [];
         links.forEach(link => {
@@ -110,12 +111,11 @@ html_content += """
     function loadAllLinks() {
         let turmas = document.querySelectorAll(".turma h3");
         turmas.forEach(turmaElement => {
-            let turma = turmaElement.textContent;
+            let turma = turmaElement.textContent.trim();
             loadLinks(turma);
         });
     }
 </script>
-
 
 </body>
 </html>
