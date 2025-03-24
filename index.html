@@ -39,7 +39,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="loadTexts()">
     <div id="container">
         <h2>Insira seu texto</h2>
         <div id="textEntries"></div>
@@ -59,9 +59,29 @@
                 entry.classList.add("entry");
                 entry.textContent = text;
                 document.getElementById("textEntries").appendChild(entry);
+                
+                saveText(text);
                 input.value = "";
                 input.focus();
             }
+        }
+
+        function saveText(text) {
+            let texts = JSON.parse(localStorage.getItem("texts")) || [];
+            texts.push(text);
+            localStorage.setItem("texts", JSON.stringify(texts));
+        }
+
+        function loadTexts() {
+            let texts = JSON.parse(localStorage.getItem("texts")) || [];
+            let container = document.getElementById("textEntries");
+            
+            texts.forEach(text => {
+                let entry = document.createElement("div");
+                entry.classList.add("entry");
+                entry.textContent = text;
+                container.appendChild(entry);
+            });
         }
     </script>
 </body>
