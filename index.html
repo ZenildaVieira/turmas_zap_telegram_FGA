@@ -1982,6 +1982,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // Apagar os links antigos sempre que um novo HTML for gerado
+        localStorage.clear();
         setTimeout(loadAllLinks, 500);
     });
 
